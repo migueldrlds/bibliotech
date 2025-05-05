@@ -1,0 +1,48 @@
+{
+  "kind": "collectionType",
+  "collectionName": "loans",
+  "info": {
+    "singularName": "loan",
+    "pluralName": "loans",
+    "displayName": "loan"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "book": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::book.book",
+      "inversedBy": "loans"
+    },
+    "usuario": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "loans"
+    },
+    "fecha_prestamo": {
+      "type": "date",
+      "required": true
+    },
+    "fecha_devolucion_esperada": {
+      "type": "date",
+      "required": true
+    },
+    "fecha_devolucion_real": {
+      "type": "date"
+    },
+    "estado": {
+      "type": "enumeration",
+      "enum": [
+        "activo",
+        "devuelto",
+        "vencido"
+      ]
+    },
+    "notas": {
+      "type": "string"
+    }
+  }
+}
