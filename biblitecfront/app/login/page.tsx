@@ -140,23 +140,17 @@ export default function Login() {
 
             <div className="mt-4 text-center text-sm">
               <p className="text-muted-foreground">
-                Para demostración, use:
+                
               </p>
               <div className="grid grid-cols-3 gap-2 mt-1">
                 <div>
-                  <p className="font-medium">Admin</p>
-                  <p className="text-xs text-muted-foreground">admin@bibliotech.com</p>
-                  <p className="text-xs text-muted-foreground">admin123</p>
+                 
                 </div>
                 <div>
-                  <p className="font-medium">Bibliotecario</p>
-                  <p className="text-xs text-muted-foreground">librarian@bibliotech.com</p>
-                  <p className="text-xs text-muted-foreground">librarian123</p>
+                  
                 </div>
                 <div>
-                  <p className="font-medium">Miembro</p>
-                  <p className="text-xs text-muted-foreground">member@bibliotech.com</p>
-                  <p className="text-xs text-muted-foreground">member123</p>
+                  
                 </div>
               </div>
             </div>

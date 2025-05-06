@@ -37,9 +37,7 @@ export default function Home() {
               <CardDescription className="text-base text-gray-700 min-h-[100px]">
                 Administre su colección completa con información detallada sobre ubicación, disponibilidad y estado de cada ejemplar.
               </CardDescription>
-              <Button asChild className="w-full mt-4">
-                <Link href="/login">Iniciar Sesión para Acceder</Link>
-              </Button>
+              
             </CardContent>
           </Card>
 
@@ -54,9 +52,7 @@ export default function Home() {
               <CardDescription className="text-base text-gray-700 min-h-[100px]">
                 Administre los usuarios del sistema con distintos roles, permisos y seguimiento de actividad.
               </CardDescription>
-              <Button asChild className="w-full mt-4">
-                <Link href="/login">Iniciar Sesión para Acceder</Link>
-              </Button>
+              
             </CardContent>
           </Card>
 
@@ -71,9 +67,7 @@ export default function Home() {
               <CardDescription className="text-base text-gray-700 min-h-[100px]">
                 Genere informes detallados sobre préstamos, consultas, usuarios y más para tomar decisiones informadas.
               </CardDescription>
-              <Button asChild className="w-full mt-4">
-                <Link href="/login">Iniciar Sesión para Acceder</Link>
-              </Button>
+              
             </CardContent>
           </Card>
         </div>

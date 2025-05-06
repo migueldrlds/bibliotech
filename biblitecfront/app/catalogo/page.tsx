@@ -242,28 +242,10 @@ export default function CatalogoPage() {
           <h1 className="text-3xl font-bold">Catálogo de la Biblioteca</h1>
           <p className="text-muted-foreground mt-2">Explora nuestra colección de libros</p>
         </div>
-        
-        <div className="flex gap-2 mt-4 md:mt-0">
-          <Button
-            variant="outline"
-            onClick={() => setIsFilterVisible(!isFilterVisible)}
-          >
-            <Filter className="h-4 w-4 mr-2" />
-            Filtros
-          </Button>
-          
-          {canAddBooks && (
-            <Button onClick={() => setIsAddModalOpen(true)} className="bg-primary">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus mr-2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              Agregar libro
-            </Button>
-          )}
-        </div>
       </div>
-      
-      {/* Campo de búsqueda visible permanentemente */}
-      <div className="mb-6">
-        <div className="relative max-w-md mx-auto">
+
+      <div className="flex flex-col md:flex-row gap-4 items-center justify-end mb-8">
+        <div className="relative w-full md:w-auto md:min-w-[300px]">
           {isRefreshing ? (
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4">
               <div className="w-4 h-4 border-t-2 border-primary rounded-full animate-spin"></div>
@@ -278,6 +260,23 @@ export default function CatalogoPage() {
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 w-full"
           />
+        </div>
+        
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            onClick={() => setIsFilterVisible(!isFilterVisible)}
+          >
+            <Filter className="h-4 w-4 mr-2" />
+            Filtros
+          </Button>
+          
+          {canAddBooks && (
+            <Button onClick={() => setIsAddModalOpen(true)} className="bg-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-plus mr-2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              Agregar libro
+            </Button>
+          )}
         </div>
       </div>
       

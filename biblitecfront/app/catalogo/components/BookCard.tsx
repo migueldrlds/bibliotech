@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
-import { ArrowRight, Trash2, Pencil, AlertTriangle } from 'lucide-react';
+import { Eye, Trash2, Pencil, AlertTriangle, BookOpen, User } from 'lucide-react';
 import { Book } from '../page';
 import { useUser } from '@/context/user-context';
 import {
@@ -71,83 +71,49 @@ export function BookCard({ book, onDelete, onEdit, onViewDetails }: BookCardProp
     }
   };
 
+  // Determinar color de la etiqueta de unidades
+  let unidadColor = 'bg-green-600 text-white';
+  if (book.unidad <= 1) {
+    unidadColor = 'bg-red-600 text-white';
+  } else if (book.unidad <= 5) {
+    unidadColor = 'bg-yellow-400 text-black';
+  }
+
   return (
     <>
-      <Card className="overflow-hidden flex flex-col relative group aspect-square min-h-[180px] max-h-[210px] h-full justify-between p-2">
-        {/* Botones flotantes de edición/eliminación - solo mostrados para usuarios con permisos */}
-        {canEditBooks && (
-          <div className="absolute top-2 left-2 z-10 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Button
-              size="icon"
-              variant="default"
-              className="h-8 w-8 bg-primary text-white rounded-full shadow-md"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onEdit(book);
-              }}
-            >
-              <Pencil className="h-4 w-4" />
-            </Button>
-            <Button
-              size="icon"
-              variant="destructive"
-              className="h-8 w-8 rounded-full shadow-md"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setShowDeleteDialog(true);
-              }}
-              disabled={isDeleting}
-            >
-              {isDeleting ? (
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent"></div>
-              ) : (
-                <Trash2 className="h-4 w-4" />
-              )}
-            </Button>
+      <Card className="overflow-hidden flex flex-col relative group aspect-square min-h-[180px] max-h-[210px] h-full justify-between p-2 transition-all duration-300 hover:shadow-lg hover:scale-[1.02] hover:border-primary/50">
+        <div className="flex-1 flex flex-col justify-between p-2">
+          <div>
+            <h3 className="font-semibold text-sm mb-2 break-words whitespace-normal leading-snug">{book.titulo || 'Sin título'}</h3>
+            <div className="flex items-center gap-1 mb-2">
+              <User className="h-4 w-4 text-muted-foreground" />
+              <span className="text-muted-foreground text-xs">{book.autor || 'Autor desconocido'}</span>
+            </div>
+            <span className="bg-muted px-2 py-1 rounded font-mono text-xs text-foreground border border-muted-foreground/20">{book.clasificacion || 'Sin clasificación'}</span>
           </div>
-        )}
-        <CardContent className="flex-1 flex flex-col items-center justify-center p-2 text-center">
-          <h3 className="font-bold text-sm mb-1 line-clamp-2">{book.titulo || 'Sin título'}</h3>
-          <p className="text-muted-foreground text-xs mb-1 line-clamp-1">{book.autor || 'Autor desconocido'}</p>
-          <Badge variant="secondary" className="text-[10px] mb-1">Unidad: {book.unidad || 'N/A'}</Badge>
-          <Badge variant="outline" className="text-[10px] mt-1">{book.clasificacion || 'Sin clasificación'}</Badge>
-        </CardContent>
-        <CardFooter className="border-t pt-1 pb-1 px-1">
-          <div className="w-full grid grid-cols-2 gap-1">
-            {canEditBooks ? (
-              <>
-                <Button size="sm" variant="outline" className="text-xs px-1 py-1" onClick={(e) => {
-                  e.preventDefault();
-                  onEdit(book);
-                }}>
-                  <Pencil className="h-4 w-4" />
-                </Button>
-                <Button size="sm" className="text-xs px-1 py-1" onClick={(e) => {
-                  e.preventDefault();
-                  const bookId = book.documentId || book.id_libro || book.id;
-                  if (bookId) {
-                    onViewDetails(bookId);
-                  }
-                }}>
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </>
-            ) : (
-              <Button size="sm" className="text-xs px-1 py-1 col-span-2" onClick={(e) => {
+        </div>
+        <div className="flex justify-between items-end mt-auto">
+          <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded-md whitespace-nowrap ${unidadColor}`}>{book.unidad ? `${book.unidad} unidades` : 'Sin unidades'}</span>
+          <div className="flex gap-1">
+            {canEditBooks && (
+              <Button size="icon" variant="ghost" className="p-0 h-7 w-7 text-muted-foreground hover:text-primary" onClick={(e) => {
                 e.preventDefault();
-                const bookId = book.documentId || book.id_libro || book.id;
-                if (bookId) {
-                  onViewDetails(bookId);
-                }
+                onEdit(book);
               }}>
-                <ArrowRight className="h-4 w-4 mr-1" />
-                Ver detalles
+                <Pencil className="h-4 w-4" />
               </Button>
             )}
+            <Button size="icon" variant="ghost" className="p-0 h-7 w-7 text-muted-foreground hover:text-primary" onClick={(e) => {
+              e.preventDefault();
+              const bookId = book.documentId || book.id_libro || book.id;
+              if (bookId) {
+                onViewDetails(bookId);
+              }
+            }}>
+              <BookOpen className="h-4 w-4" />
+            </Button>
           </div>
-        </CardFooter>
+        </div>
       </Card>
 
       {/* Diálogo de confirmación para eliminar libro */}
