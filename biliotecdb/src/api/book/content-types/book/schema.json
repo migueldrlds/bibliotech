@@ -37,14 +37,16 @@
     "clasificacion": {
       "type": "string"
     },
-    "unidad": {
-      "required": true,
-      "type": "integer"
-    },
     "loans": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::loan.loan",
+      "mappedBy": "book"
+    },
+    "inventories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::inventory.inventory",
       "mappedBy": "book"
     }
   }

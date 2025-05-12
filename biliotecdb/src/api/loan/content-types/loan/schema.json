@@ -4,7 +4,8 @@
   "info": {
     "singularName": "loan",
     "pluralName": "loans",
-    "displayName": "loan"
+    "displayName": "loan",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -23,26 +24,47 @@
       "inversedBy": "loans"
     },
     "fecha_prestamo": {
-      "type": "date",
+      "type": "datetime",
       "required": true
     },
     "fecha_devolucion_esperada": {
-      "type": "date",
+      "type": "datetime",
       "required": true
     },
     "fecha_devolucion_real": {
-      "type": "date"
+      "type": "datetime"
     },
     "estado": {
       "type": "enumeration",
       "enum": [
         "activo",
         "devuelto",
-        "vencido"
+        "renovado",
+        "atrasado",
+        "perdido"
       ]
     },
     "notas": {
       "type": "string"
+    },
+    "campus_origen": {
+      "type": "enumeration",
+      "enum": [
+        "Tomas Aquino",
+        "Otay"
+      ]
+    },
+    "multa": {
+      "type": "integer"
+    },
+    "renewalCount": {
+      "type": "integer",
+      "default": 0,
+      "max": 2,
+      "min": 0
+    },
+    "dias_atraso": {
+      "type": "integer"
     }
   }
 }

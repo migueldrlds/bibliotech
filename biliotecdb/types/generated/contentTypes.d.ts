@@ -390,13 +390,47 @@ export interface ApiBookBook extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     id_libro: Schema.Attribute.String & Schema.Attribute.Required;
+    inventories: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::inventory.inventory'
+    >;
     loans: Schema.Attribute.Relation<'oneToMany', 'api::loan.loan'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::book.book'> &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
     titulo: Schema.Attribute.String & Schema.Attribute.Required;
-    unidad: Schema.Attribute.Integer & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiInventoryInventory extends Struct.CollectionTypeSchema {
+  collectionName: 'inventories';
+  info: {
+    description: 'Inventario de libros por campus';
+    displayName: 'Inventory';
+    pluralName: 'inventories';
+    singularName: 'inventory';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    book: Schema.Attribute.Relation<'manyToOne', 'api::book.book'>;
+    Campus: Schema.Attribute.Enumeration<['Tomas Aquino', 'Otay']>;
+    Cantidad: Schema.Attribute.Integer;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::inventory.inventory'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -406,6 +440,7 @@ export interface ApiBookBook extends Struct.CollectionTypeSchema {
 export interface ApiLoanLoan extends Struct.CollectionTypeSchema {
   collectionName: 'loans';
   info: {
+    description: '';
     displayName: 'loan';
     pluralName: 'loans';
     singularName: 'loan';
@@ -415,19 +450,33 @@ export interface ApiLoanLoan extends Struct.CollectionTypeSchema {
   };
   attributes: {
     book: Schema.Attribute.Relation<'manyToOne', 'api::book.book'>;
+    campus_origen: Schema.Attribute.Enumeration<['Tomas Aquino', 'Otay']>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    estado: Schema.Attribute.Enumeration<['activo', 'devuelto', 'vencido']>;
-    fecha_devolucion_esperada: Schema.Attribute.Date &
+    dias_atraso: Schema.Attribute.Integer;
+    estado: Schema.Attribute.Enumeration<
+      ['activo', 'devuelto', 'renovado', 'atrasado', 'perdido']
+    >;
+    fecha_devolucion_esperada: Schema.Attribute.DateTime &
       Schema.Attribute.Required;
-    fecha_devolucion_real: Schema.Attribute.Date;
-    fecha_prestamo: Schema.Attribute.Date & Schema.Attribute.Required;
+    fecha_devolucion_real: Schema.Attribute.DateTime;
+    fecha_prestamo: Schema.Attribute.DateTime & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::loan.loan'> &
       Schema.Attribute.Private;
+    multa: Schema.Attribute.Integer;
     notas: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    renewalCount: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 2;
+          min: 0;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -435,36 +484,6 @@ export interface ApiLoanLoan extends Struct.CollectionTypeSchema {
       'manyToOne',
       'plugin::users-permissions.user'
     >;
-  };
-}
-
-export interface ApiUsrUsr extends Struct.CollectionTypeSchema {
-  collectionName: 'usrs';
-  info: {
-    displayName: 'Usr';
-    pluralName: 'usrs';
-    singularName: 'usr';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    createAt: Schema.Attribute.Date;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    email: Schema.Attribute.Email & Schema.Attribute.Required;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<'oneToMany', 'api::usr.usr'> &
-      Schema.Attribute.Private;
-    name: Schema.Attribute.String & Schema.Attribute.Required;
-    password: Schema.Attribute.Password & Schema.Attribute.Required;
-    publishedAt: Schema.Attribute.DateTime;
-    role: Schema.Attribute.Enumeration<['admin', 'librarian', 'member']> &
-      Schema.Attribute.Required;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
   };
 }
 
@@ -926,6 +945,10 @@ export interface PluginUsersPermissionsUser
   };
   attributes: {
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    campus: Schema.Attribute.Enumeration<['Tomas Aquino', 'Otay']>;
+    Carrera: Schema.Attribute.Enumeration<
+      ['Sistemas', 'Arquitectura', 'Aeronautica']
+    >;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
@@ -936,6 +959,10 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
+    Estado: Schema.Attribute.Enumeration<['Activo', 'Inactivo', 'Baja']>;
+    Genero: Schema.Attribute.Enumeration<
+      ['Helicoptero', 'Transformer', 'Hombre', 'Mujer', 'Otro']
+    >;
     loans: Schema.Attribute.Relation<'oneToMany', 'api::loan.loan'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -943,7 +970,7 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.user'
     > &
       Schema.Attribute.Private;
-    numcontrol: Schema.Attribute.BigInteger;
+    Numcontrol: Schema.Attribute.String;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{
@@ -952,6 +979,8 @@ export interface PluginUsersPermissionsUser
     provider: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
     resetPasswordToken: Schema.Attribute.String & Schema.Attribute.Private;
+    rol: Schema.Attribute.Enumeration<['Alumno', 'Interno', 'Administrador']> &
+      Schema.Attribute.Required;
     role: Schema.Attribute.Relation<
       'manyToOne',
       'plugin::users-permissions.role'
@@ -979,8 +1008,8 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::book.book': ApiBookBook;
+      'api::inventory.inventory': ApiInventoryInventory;
       'api::loan.loan': ApiLoanLoan;
-      'api::usr.usr': ApiUsrUsr;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;
       'plugin::i18n.locale': PluginI18NLocale;

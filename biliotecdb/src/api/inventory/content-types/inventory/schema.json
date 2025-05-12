@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "inventories",
+  "info": {
+    "singularName": "inventory",
+    "pluralName": "inventories",
+    "displayName": "Inventory",
+    "description": "Inventario de libros por campus"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "Campus": {
+      "type": "enumeration",
+      "enum": [
+        "Tomas Aquino",
+        "Otay"
+      ]
+    },
+    "Cantidad": {
+      "type": "integer"
+    },
+    "book": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::book.book",
+      "inversedBy": "inventories"
+    }
+  }
+}

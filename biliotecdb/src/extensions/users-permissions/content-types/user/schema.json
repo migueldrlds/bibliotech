@@ -65,14 +65,56 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "numcontrol": {
-      "type": "biginteger"
-    },
     "loans": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::loan.loan",
       "mappedBy": "usuario"
+    },
+    "campus": {
+      "type": "enumeration",
+      "enum": [
+        "Tomas Aquino",
+        "Otay"
+      ]
+    },
+    "Genero": {
+      "type": "enumeration",
+      "enum": [
+        "Helicoptero",
+        "Transformer",
+        "Hombre",
+        "Mujer",
+        "Otro"
+      ]
+    },
+    "Carrera": {
+      "type": "enumeration",
+      "enum": [
+        "Sistemas",
+        "Arquitectura",
+        "Aeronautica"
+      ]
+    },
+    "Numcontrol": {
+      "type": "string"
+    },
+    "Estado": {
+      "type": "enumeration",
+      "enum": [
+        "Activo",
+        "Inactivo",
+        "Baja"
+      ]
+    },
+    "rol": {
+      "type": "enumeration",
+      "enum": [
+        "Alumno",
+        "Interno",
+        "Administrador"
+      ],
+      "required": true
     }
   }
 }
