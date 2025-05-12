@@ -1,0 +1,46 @@
+/* Efecto Glow Card con glow blanco puro */
+.glow-card {
+  --start: 0;
+  position: relative;
+  border-radius: 14px;
+  transition: border-color 0.3s ease-in-out;
+  overflow: visible;
+  border: 1px solid rgba(120,120,120,0.18); /* Borde gris muy delgado y translúcido */
+}
+
+.glow-card::before {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 100%;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 14px;
+  border: 2px solid transparent;
+  background: conic-gradient(
+    from 90deg at 50% 50%,
+    #fff,
+    #fff,
+    #fff,
+    #fff,
+    #fff
+  );
+  background-attachment: fixed;
+  mask: linear-gradient(#0000, #0000), conic-gradient(from calc((var(--start) - 22) * 1deg), #ffffff1f 0deg, white, #ffffff00 100deg);
+  mask-composite: intersect;
+  mask-clip: padding-box, border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.5s ease;
+  z-index: 2;
+  box-shadow:
+    0 0 48px 16px #fff,
+    0 0 96px 32px #fff,
+    0 0 128px 48px #fff;
+}
+
+.glow-card:hover::before {
+  opacity: 1;
+  transition: 0.5s;
+} 
